@@ -793,6 +793,19 @@ void GameStart()
                     Console.WriteLine("원하시는 행동을 입력해주세요.");
                     Console.Write(">>");
                     string input2 = Console.ReadLine();
+                    if(input2 == "0")
+                    {
+
+
+                        Console.Clear();
+                        GameStart();
+
+
+                        break;
+
+
+
+                    }
 
 
                 }
@@ -965,16 +978,13 @@ public class Inventory
     {
 
 
-        var view = items
-        .OrderByDescending(it => it.Name.Length) // 길이 긴 순
-        .ThenBy(it => it.Name)                   // 길이 같으면 이름순
-        .ToList();
+        
 
 
         for (int i = 0; i < items.Count; i++)
         {
 
-            var it = view[i]; ; // <- 여기서 말한 부분
+            var it = items[i]; ; // <- 여기서 말한 부분
 
 
             string indexText = showIndex ? $"{i + 1}." : "";
