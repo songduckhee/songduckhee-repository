@@ -102,15 +102,15 @@ void GameStart()
 
 
 
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine("원하시는 행동을 입력해주세요.");
-                    Console.WriteLine(">>");
+                   
+          
 
                     while (true)
                     {
-                        
+                        Console.WriteLine();
+                        Console.WriteLine("0. 나가기");
+                        Console.WriteLine();
+                        Console.WriteLine("원하시는 행동을 입력해주세요.");
                         Console.Write(">> ");
                         string input1 = Console.ReadLine();
                         if (input1 == "0")
