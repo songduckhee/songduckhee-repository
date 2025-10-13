@@ -120,6 +120,10 @@ void GameStart()
 
                         }
                         inven.HandleInventoryInput(input1);
+
+           
+
+                
                         inven.ShowInventory(showIndex: true, showMark: true);
                     }
 
@@ -756,7 +760,7 @@ void GameStart()
                 shop.ShowShop(false,false);
                 Console.WriteLine();
                 Console.WriteLine("1.아이템 구매");
-                Console.WriteLine("2.아이템 구매");
+                Console.WriteLine("2.아이템 판매");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
@@ -1006,6 +1010,7 @@ public class Inventory
         // 같은 타입의 기존 장비 해제
         if (isWeapon && equippedWeapon != null)
             equippedWeapon.Equipped = false;
+        
         if (isArmor && equippedArmor != null)
             equippedArmor.Equipped = false;
 
@@ -1051,6 +1056,7 @@ public class Shop
             
             Console.WriteLine($"- {indexText}{mark}{it.Name, -10}| {it.Stat, -10} | {it.Description,-30} | {purchased} ")  ;
         }
+       
     }
 
   
