@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RPG만들기2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ab418f5a3b270254e7c558da2c2924fa1d70b441")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e84330f929be3b2b05b1b23419dbece2ee46dfbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("RPG만들기2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RPG만들기2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
