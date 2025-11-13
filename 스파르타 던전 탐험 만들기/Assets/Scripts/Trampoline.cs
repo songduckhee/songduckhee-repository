@@ -18,6 +18,7 @@ public class Trampoline : MonoBehaviour
 	private void OnCollisionEnter(Collision collision)
 	{
 		playerRigidbody = collision.rigidbody;
+		Debug
 
 		playerRigidbody.AddForce(transform.up * power);
 		playerRigidbody.AddForce(transform.up * power, ForceMode.Impulse);
