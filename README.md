@@ -1,2 +1,2 @@
 # songduckhee-repository
-easy
+help me
