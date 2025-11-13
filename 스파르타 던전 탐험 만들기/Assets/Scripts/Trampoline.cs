@@ -5,14 +5,21 @@ using UnityEngine;
 public class Trampoline : MonoBehaviour
 {
 
-    void Start()
-    {
-        
-    }
+	Rigidbody playerRigidbody;
+	float power = 5.0f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void Start()
+	{
+		
+
+	}
+
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		playerRigidbody = collision.rigidbody;
+
+		playerRigidbody.AddForce(transform.up * power);
+		playerRigidbody.AddForce(transform.up * power, ForceMode.Impulse);
+	}
 }
