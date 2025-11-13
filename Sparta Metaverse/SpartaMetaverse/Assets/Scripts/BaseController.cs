@@ -64,7 +64,16 @@ public class BaseController : MonoBehaviour
 
   private void Rotate(Vector2 direction)
   {
-	float rotZ = Mathf.Atan2(direction.y,direction.x)*Mathf.Rad2Deg; //Atan2를 사용하면 radian의 각도값이 나옴 * Mathf.Rad2Deg를 곱해주면 라디안에 파이값같은걸 곱해주면서 라디안 값이 우리가 아는 360도의 디그리값이 됨
+	float rotZ = Mathf.Atan2(direction.y,direction.x)*Mathf.Rad2Deg;
+	//Atan2를 사용하면 radian의 각도값이 나옴 * Mathf.Rad2Deg를 곱해주면 라디안에 파이값같은걸 곱해주면서 라디안 값이 우리가 아는 360도의 디그리값이 됨
+	bool isLeft =  Mathf.Abs(rotZ) > 90f;
+
+	characterRenderer.flipX = isLeft;
+
+	if(weaponPivot != null)
+	{
+	  weaponPivot.rotation = Quaternion.Euler(0,0,rotZ);
+	}
   }
 
   public void Applyknockback(Transform other,float power, float duration)
