@@ -6,7 +6,7 @@ public class Trampoline : MonoBehaviour
 {
 
 	Rigidbody playerRigidbody;
-	float power = 5.0f;
+	float power = 80.0f;
 
 	private void Start()
 	{
@@ -16,6 +16,13 @@ public class Trampoline : MonoBehaviour
 
 
 	private void OnCollisionEnter(Collision collision)
+	{
+		playerRigidbody = collision.rigidbody;
+
+		playerRigidbody.AddForce(transform.up * power);
+		playerRigidbody.AddForce(transform.up * power, ForceMode.Impulse);
+	}
+	private void OnCollisionExit(Collision collision)
 	{
 		playerRigidbody = collision.rigidbody;
 
