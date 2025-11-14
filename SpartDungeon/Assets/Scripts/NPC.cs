@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -35,6 +35,7 @@ public class NPC : MonoBehaviour
     public float attackDistance;
 
     private float playerDistance;
+ 
 
     public float fieldOfView = 120f;
 
@@ -56,7 +57,7 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerDistance = Vector3.Distance(transform.position,CharacterManager.Instance.Player.transform.position);
+        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player.transform.position);
         animator.SetBool("Moving",aiState != AIState.Idle);
 
         switch (aiState)
