@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
@@ -16,7 +16,7 @@ public class BaseController : MonoBehaviour
   public Vector2 MovementDirection {  get { return movementDirection; }}
 
   protected Vector2 lookDirection = Vector2.zero;
-  public Vector2 LookDirection { get { return lookDirection; }};
+  public Vector2 LookDirection { get { return lookDirection; }}
 
   private Vector2 Knockback = Vector2.zero;
   private float KnockbackDuration = 0.0f;
@@ -65,7 +65,7 @@ public class BaseController : MonoBehaviour
   private void Rotate(Vector2 direction)
   {
 	float rotZ = Mathf.Atan2(direction.y,direction.x)*Mathf.Rad2Deg;
-	//Atan2¸¦ »ç¿ëÇÏ¸é radianÀÇ °¢µµ°ªÀÌ ³ª¿È * Mathf.Rad2Deg¸¦ °öÇØÁÖ¸é ¶óµğ¾È¿¡ ÆÄÀÌ°ª°°Àº°É °öÇØÁÖ¸é¼­ ¶óµğ¾È °ªÀÌ ¿ì¸®°¡ ¾Æ´Â 360µµÀÇ µğ±×¸®°ªÀÌ µÊ
+	//Atan2ë¥¼ ì‚¬ìš©í•˜ë©´ radianì˜ ê°ë„ê°’ì´ ë‚˜ì˜´ * Mathf.Rad2Degë¥¼ ê³±í•´ì£¼ë©´ ë¼ë””ì•ˆì— íŒŒì´ê°’ê°™ì€ê±¸ ê³±í•´ì£¼ë©´ì„œ ë¼ë””ì•ˆ ê°’ì´ ìš°ë¦¬ê°€ ì•„ëŠ” 360ë„ì˜ ë””ê·¸ë¦¬ê°’ì´ ë¨
 	bool isLeft =  Mathf.Abs(rotZ) > 90f;
 
 	characterRenderer.flipX = isLeft;
