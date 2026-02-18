@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,7 +25,7 @@ public class Interaction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time -  lastCheckTime > checkRate) //·¹ÀÌ°¡ 0.05ÃÊ¸¶´Ù Ä«¸Ş¶ó Á¤Áß¾ÓÀ» ½÷ÁÖ°í
+        if(Time.time -  lastCheckTime > checkRate) //ë ˆì´ê°€ 0.05ì´ˆë§ˆë‹¤ ì¹´ë©”ë¼ ì •ì¤‘ì•™ì„ ì´ì£¼ê³ 
         {
             lastCheckTime = Time.time;
 
@@ -36,7 +36,7 @@ public class Interaction : MonoBehaviour
 				if (hit.collider.gameObject != curInteractGameObject)
 				{
 					curInteractGameObject = hit.collider.gameObject;
-					curInteractable = hit.collider.GetComponent<IInteractable>(); //¸¸¾à ¹º°¡ ¸Â¾Ò´Ù¸é ±× ¸ÂÀº ¿ÀºêÁ§Æ®¸¦ interactionÅ¬·¡½º¿¡ ³Ö¾îÁÜ
+					curInteractable = hit.collider.GetComponent<IInteractable>(); //ë§Œì•½ ë­”ê°€ ë§ì•˜ë‹¤ë©´ ê·¸ ë§ì€ ì˜¤ë¸Œì íŠ¸ì˜ interactioní´ë˜ìŠ¤ë¥¼ ë„£ì–´ì¤Œ
 					SetPromptText();
 				}
 			}
@@ -58,7 +58,7 @@ public class Interaction : MonoBehaviour
     {
         if(context.phase == InputActionPhase.Started && curInteractable != null)
         {
-            curInteractable.OnInteract(); //¿©±â¼­ e¸¦ ´©¸¥ ¾ÆÀÌÅÛÀÇ µ¥ÀÌÅÍ¸¦ ÇÃ·¹ÀÌ¾î¿¡°Ô ³Ñ°ÜÁÜ
+            curInteractable.OnInteract(); //ì—¬ê¸°ì„œ eë¥¼ ëˆ„ë¥¸ ì•„ì´í…œì˜ ë°ì´í„°ë¥¼ í”Œë ˆì´ì–´ì—ê²Œ ë„˜ê²¨ì¤Œ
             curInteractGameObject = null;
             curInteractable = null;
             promptText.gameObject.SetActive(false);

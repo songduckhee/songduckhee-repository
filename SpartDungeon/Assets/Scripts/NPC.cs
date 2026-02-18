@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,7 +9,7 @@ public enum AIState
     Wandering,
     Attacking
 }
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour,IDamageable
 {
     [Header("Stats")]
     public int health;
@@ -52,13 +52,14 @@ public class NPC : MonoBehaviour
 	void Start()
     {
         SetState(AIState.Wandering);
-    }
+		playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player.transform.position);
+	}
 
     // Update is called once per frame
     void Update()
     {
         playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player.transform.position);
-        animator.SetBool("Moving",aiState != AIState.Idle);
+        animator.SetBool("Moving",aiState != AIState.Idle); // 애니메이터 enum 멤버에 따라서 알아서 bool 값 바뀌게 하기
 
         switch (aiState)
         {
@@ -74,8 +75,8 @@ public class NPC : MonoBehaviour
     public void SetState(AIState state)
     {
         aiState = state;
-
-        switch (aiState)
+		CancelInvoke();
+		switch (aiState)
         {
             case AIState.Idle: 
                 agent.speed = walkSpeed;
@@ -103,7 +104,7 @@ public class NPC : MonoBehaviour
         if(playerDistance < detectDistance)
         {
             SetState(AIState.Attacking);
-        }
+		}
     }
     void WanderToNewLocation()
     {
@@ -175,4 +176,37 @@ public class NPC : MonoBehaviour
         return angle<fieldOfView;
     }
 
+	public void TakePhysicalDamage(int damage)
+	{
+		health -= damage;
+        if(health <= 0)
+        {
+            Die();
+        }
+        //플래쉬 
+        StartCoroutine(flashEffect());
+	}
+    
+    void Die()
+    {
+        for (int i = 0; i < dropOnDeath.Length; i++)
+        {
+            Instantiate(dropOnDeath[i].dropPrefabs,transform.position + Vector3.up * 2,Random.rotation);
+        }
+
+        Destroy(gameObject);
+    }
+    IEnumerator flashEffect()
+    {
+        for ( int i = 0 ; i < meshRenderers.Length ; i++)
+        {
+            meshRenderers[i].material.EnableKeyword("_EMISSION"); ;
+            meshRenderers[i].material.SetColor("_EmissionColor", Color.red);
+        }
+        yield return new WaitForSeconds(0.5f);
+		for (int i = 0; i < meshRenderers.Length; i++)
+		{
+			meshRenderers[i].material.DisableKeyword("_EMISSION"); ;
+		}
+	}
 }
