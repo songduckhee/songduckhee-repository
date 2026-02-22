@@ -19,8 +19,8 @@ public class Equipment : MonoBehaviour
     public void EquipNew(ItemData data)
     {
         UnEquip();
-        curEquip = Instantiate(data.equipPrefab,equipParent).GetComponent<Equip>(); //ÇÁ¸®ÆéÀ» »ı¼ºÇØÁÖ°í °Å±â¼­ GetComponent·Î EquipÀ» »ı¼ºÇØÁØµÚ °¡Á®¿Í¼­
-                                                                                    //curEquip¿¡ ³Ö¾îÁÜ.(ÂüÁ¶) 
+        curEquip = Instantiate(data.equipPrefab,equipParent).GetComponent<Equip>(); //í”„ë¦¬í©ì„ ìƒì„±í•´ì£¼ê³  ê±°ê¸°ì„œ GetComponentë¡œ Equipì„ ìƒì„±í•´ì¤€ë’¤ ê°€ì ¸ì™€ì„œ
+        controller.playerAnimator.SetBool("Equip",true);                                                                            //curEquipì— ë„£ì–´ì¤Œ.(ì°¸ì¡°) 
     }
     public void UnEquip()
     {
@@ -28,7 +28,8 @@ public class Equipment : MonoBehaviour
         {
             Destroy(curEquip.gameObject);
             curEquip = null;
-        }
+			controller.playerAnimator.SetBool("Equip", false);
+		}
     }
     public void OnAttackInput(InputAction.CallbackContext context)
     {

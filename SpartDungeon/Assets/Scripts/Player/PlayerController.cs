@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,10 +24,18 @@ public class PlayerController : MonoBehaviour
 
 	public Action inventory;
 	private Rigidbody _rigidbody;
+	public Animator ghostAnimator;
+	public Animator playerAnimator;
+
+	[Header("Collider")]
+	public Collider playerCollider;
 
 	private void Awake()
 	{
 		_rigidbody = GetComponent<Rigidbody>();
+		playerAnimator = GetComponent<Animator>();
+		ghostAnimator = transform.Find("Ghost").GetComponent<Animator>();
+		playerCollider = GetComponent<Collider>();
 	}
 
 	private void Start()
@@ -44,7 +53,21 @@ public class PlayerController : MonoBehaviour
 		{
 			CameraLook();
 		}
-		
+
+	}
+	private void OnTriggerEnter(Collider other)
+	{
+		if (LayerMask.LayerToName(other.gameObject.layer) == "Water")
+		{
+			_rigidbody.drag = 2f;
+		}
+	}
+	private void OnTriggerExit(Collider other)
+	{
+		if (LayerMask.LayerToName(other.gameObject.layer) == "Water")
+		{
+			_rigidbody.drag = 0f;
+		}
 	}
 
 	void Move()
@@ -59,20 +82,22 @@ public class PlayerController : MonoBehaviour
 	{
 		camCurXRot += mouseDelta.y * LookSensitivity;
 		camCurXRot = Mathf.Clamp(camCurXRot, minXLook, maxXLook);
-		cameraContainer.localEulerAngles = new Vector3(-camCurXRot,0,0);
+		cameraContainer.localEulerAngles = new Vector3(-camCurXRot, 0, 0);
 
-		transform.eulerAngles += new Vector3(0,mouseDelta.x * LookSensitivity, 0);
+		transform.eulerAngles += new Vector3(0, mouseDelta.x * LookSensitivity, 0);
 	}
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
-		if(context.phase == InputActionPhase.Performed)
+		if (context.phase == InputActionPhase.Performed)
 		{
 			curMovementInput = context.ReadValue<Vector2>();
+			ghostAnimator.SetBool("Moving", true);
 		}
-		else if(context.phase == InputActionPhase.Canceled)
+		else if (context.phase == InputActionPhase.Canceled)
 		{
 			curMovementInput = Vector2.zero;
+			ghostAnimator.SetBool("Moving", false);
 		}
 	}
 	public void OnLook(InputAction.CallbackContext context)
@@ -82,9 +107,10 @@ public class PlayerController : MonoBehaviour
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
-		if(context.phase == InputActionPhase.Started && IsGrounded())
+		LayerMask water;
+		if (context.phase == InputActionPhase.Started && IsGrounded())
 		{
-			_rigidbody.AddForce(Vector2.up*jumpPower,ForceMode.Impulse);
+			_rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
 		}
 	}
 
@@ -99,21 +125,24 @@ public class PlayerController : MonoBehaviour
 		};
 
 		for (int i = 0; i < rays.Length; i++)
-		{ 
-		
-		    if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
-		    {
-			   return true;
-	        }
-		
+		{
+
+			if (Physics.Raycast(rays[i],out RaycastHit hit, 0.1f, groundLayerMask, QueryTriggerInteraction.Collide))
+			{
+				return true;
+			}
+		}
+		if (Physics.CheckSphere(transform.position, 0.2f, groundLayerMask, QueryTriggerInteraction.Collide))
+		{
+			return true;
 		}
 		return false;
-			
+
 	}
 
 	public void OnInventory(InputAction.CallbackContext context)
 	{
-		if(context.phase == InputActionPhase.Started)
+		if (context.phase == InputActionPhase.Started)
 		{
 			inventory?.Invoke();
 			toggleCursor();
@@ -122,9 +151,9 @@ public class PlayerController : MonoBehaviour
 
 	void toggleCursor()
 	{
-		bool toggle = Cursor.lockState ==  CursorLockMode.Locked;
+		bool toggle = Cursor.lockState == CursorLockMode.Locked;
 		Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
-		canLook =! toggle;
+		canLook = !toggle;
 	}
 
 

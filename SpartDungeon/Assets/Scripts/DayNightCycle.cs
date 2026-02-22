@@ -49,18 +49,18 @@ public class DayNightCycle : MonoBehaviour
     {
         float intensity = intensityCurve.Evaluate(time);
 
-        lightSource.transform.eulerAngles = (time - (lightSource == sun ? 0.25f : 0.75f)) * noon * 4f;
+        lightSource.transform.eulerAngles = (time - (lightSource == sun ? 0.25f : 0.75f)) * noon * 4f; // 태양 위치 변화
         lightSource.color = gradient.Evaluate(time);
         lightSource.intensity = intensity;
 
         GameObject go = lightSource.gameObject;
         if(lightSource.intensity == 0 && go.activeInHierarchy)
         {
-            go.SetActive(false);
+            //go.SetActive(false);
         }
         else if(lightSource.intensity > 0 && !go.activeInHierarchy)
         {
-            go.SetActive(true);
+            //go.SetActive(true);
         }
     }
     

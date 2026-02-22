@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class EquipTool : Equip
 {
@@ -34,6 +35,13 @@ public class EquipTool : Equip
 				attacking = true;
 				animator.SetTrigger("Attack");
 				Invoke("OnCanAttack", attackRate);
+                if (doesGatherResources)
+                {
+				}
+                if (doesDealDamage)
+                {
+					CharacterManager.Instance.player.controller.playerAnimator.SetTrigger("Attack");
+				}
 			}
            
         }
@@ -52,6 +60,10 @@ public class EquipTool : Equip
             if(doesGatherResources && hit.collider.TryGetComponent(out Resource resource))
             {
                 resource.Gather(hit.point,hit.normal);
+            }
+            else if(doesDealDamage && hit.collider.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakePhysicalDamage(damage);
             }
             
         }
