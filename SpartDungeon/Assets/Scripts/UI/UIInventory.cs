@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -47,11 +47,9 @@ public class UIInventory : MonoBehaviour
             slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
             slots[i].index = i;
             slots[i].inventory = this; // 데이터 초기화
+            slots[i].type = InventoryType.UIInventory;
         }
-
-		ClearSelectedItemWindow();
-
-       
+		ClearSelectedItemWindow();   
 	}
 
     // Update is called once per frame
@@ -169,9 +167,7 @@ public class UIInventory : MonoBehaviour
     {
         if (slots[index].item == null)return; //그 슬롯에 item데이터가 없으면 중단해줌)
                                               //선택된 아이템에 대한 정보를 잠깐 갖고있어준다
-        selectedItem = slots[index].item;     //이 정보를 가지고있는 이유를 생각해봤는데 player의 item데이터는 사실이미 사라져버려서 없고 player가가진 아이템데이터가
-                                              //사실 그 이미 인벤토리에 넣어놓게되는 그런 데이터인데다 이미인벤토리에 넣어놓은다음엔 그 데이터가 사라지고 그 빈 슬롯에만 그 데이터가 들어가있음
-                                              //그래서 이걸 저장해줄 변수가필요함.
+        selectedItem = slots[index].item;     
         selectedItemIndex = index;
 
 		selectedItemName.text = selectedItem.displayName;
@@ -270,5 +266,10 @@ public class UIInventory : MonoBehaviour
     public void OnUnEquipButton()
     {
         UnEquip(selectedItemIndex);
+    }
+
+    public void OnHoldButton()
+    {
+
     }
 }

@@ -2,11 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : MonoBehaviour
+public interface OnGather
 {
+	public void Gather(Vector3 hitPoint, Vector3 hitNormal)
+    {
+
+    }
+}
+
+public class Resource : MonoBehaviour,OnGather
+{
+    [SerializeField]
     public ItemData itemToGive;
-    public int quantityPerHit = 1;
-    public int capacity;
+	[SerializeField]
+	public int quantityPerHit = 1;
+	[SerializeField]
+	public int capacity;
    
     public void Gather(Vector3 hitPoint,Vector3 hitNormal)
     {

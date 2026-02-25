@@ -12,8 +12,10 @@ public class ItemSlot : MonoBehaviour
     public Image icon;
     public TextMeshProUGUI quantityText;
     private Outline outline;
+    public InventoryType type;
 
     public UIInventory inventory;
+    public ChestInventory chestInventory;
 
     public int index;
     public bool equipped;
@@ -47,8 +49,15 @@ public class ItemSlot : MonoBehaviour
         icon.gameObject.SetActive(false);
         quantityText.text = string.Empty;
     }
-    public void OnClickButton() // ¾ê¸¦ ´©¸£¸é UIInventory¿¡ ÀÖ´Â ui¿¡ Á¤º¸°¡ ³ªÅ¸³²(UIInventory¿¡ ¾ÆÀÌÅÛ ½½·Ô¿¡ ´ëÇÑ Á¤º¸°¡ÀÖ¾î¼­ ±× ¾ÆÀÌÅÛÀÇ Á¤º¸°¡ ³ªÅ¸³²)
+    public void OnClickButton() // ì–˜ë¥¼ ëˆ„ë¥´ë©´ UIInventoryì— ìˆëŠ” uiì— ì •ë³´ê°€ ë‚˜íƒ€ë‚¨(UIInventoryì— ì•„ì´í…œ ìŠ¬ë¡¯ì— ëŒ€í•œ ì •ë³´ê°€ìˆì–´ì„œ ê·¸ ì•„ì´í…œì˜ ì •ë³´ê°€ ë‚˜íƒ€ë‚¨)
     {
-        inventory.SelectItem(index);
+        if (type == InventoryType.UIInventory)
+        {
+			inventory.SelectItem(index);
+		}
+        else if (type == InventoryType.ChestInventory)
+        {
+            chestInventory.SelectChestItem(this);
+        }
     }
 }
