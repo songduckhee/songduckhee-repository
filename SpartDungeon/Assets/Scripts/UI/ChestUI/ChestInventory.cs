@@ -112,7 +112,6 @@ public class ChestInventory : MonoBehaviour
 		ChestSlotPanel.gameObject.SetActive(true);
 		InventorySlotPanel.gameObject.SetActive(true);
 		Opend = true;
-		CurrentChest.Open = true;
 	}
 
 	public void OnChestClose()
@@ -122,7 +121,6 @@ public class ChestInventory : MonoBehaviour
 		ChestSlotPanel.gameObject.SetActive(false);
 		InventorySlotPanel.gameObject.SetActive(false);
 		Opend = false;
-		CurrentChest.Open = false;
 	}
 
 	public void UpdateChestSlotUI()

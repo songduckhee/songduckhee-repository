@@ -35,9 +35,6 @@ public class EquipTool : Equip
 				attacking = true;
 				animator.SetTrigger("Attack");
 				Invoke("OnCanAttack", attackRate);
-                if (doesGatherResources)
-                {
-				}
                 if (doesDealDamage)
                 {
 					CharacterManager.Instance.player.controller.playerAnimator.SetTrigger("Attack");

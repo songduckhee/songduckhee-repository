@@ -9,8 +9,6 @@ public class Chest : MonoBehaviour,IInteractable
 	public string displayName;
 	public string description;
 	public int slotCount;
-	
-	public bool Open;
 
 	public string GetInteractPrompt()
 	{
