@@ -12,6 +12,8 @@ public class ChestGather : MonoBehaviour,OnGather
 	public int capacity = 5;
 	[SerializeField]
 	public Chest chest;
+	[SerializeField]
+	public GameObject particle;
 	// Start is called before the first frame update
 	void Start()
     {
@@ -29,7 +31,8 @@ public class ChestGather : MonoBehaviour,OnGather
 		if (chest.IsSlotEmpty())
 		{
 			capacity -= 1;
-			if(capacity == 0)
+			Instantiate(particle, this.transform.position,this.transform.localRotation,this.transform);
+			if (capacity == 0)
 			{
 				Vector3 dir = this.transform.position - CharacterManager.Instance.player.transform.position;
 				Instantiate(itemToGive.dropPrefabs,new Vector3(this.transform.position.x,this.transform.position.y+5f, this.transform.position.z), Quaternion.LookRotation(dir));

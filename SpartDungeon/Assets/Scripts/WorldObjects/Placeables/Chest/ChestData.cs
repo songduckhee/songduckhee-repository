@@ -9,7 +9,7 @@ public class ChestData
 	public int quantity;
 
 
-	public void Set(ItemData data,int _index,int _quantity)
+	public void Set(int _index,int _quantity,ItemData data = null )
 	{
 		item = data;
 		index = _index;

@@ -40,6 +40,7 @@ public class Chest : MonoBehaviour,IInteractable
 
 		for ( int i = 0; i < slotCount; i++)
 		{
+			slot[i] = new ChestData();
 			slot[i].index = i;
 			slot[i].quantity = 0;
 		}

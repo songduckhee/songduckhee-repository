@@ -47,8 +47,9 @@ public class UIInventory : MonoBehaviour
             slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
             slots[i].index = i;
             slots[i].inventory = this; // 데이터 초기화
-            slots[i].type = InventoryType.UIInventory;
+            slots[i].type = InventoryType.Player;
         }
+		UpdateUI();
 		ClearSelectedItemWindow();   
 	}
 
@@ -263,13 +264,13 @@ public class UIInventory : MonoBehaviour
         }
     }
 
-    public void OnUnEquipButton()
-    {
-        UnEquip(selectedItemIndex);
-    }
-
     public void OnHoldButton()
     {
 
     }
+    public void UnHoldButton()
+    {
+
+    }
+    
 }

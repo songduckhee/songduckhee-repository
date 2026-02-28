@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 
 public enum InventoryType
 {
-	UIInventory,
-	ChestInventory
+	Player,
+	Chest
 }
 
 
@@ -15,21 +16,23 @@ public class ChestInventory : MonoBehaviour
 
 {
 
-	[SerializeField] private UIInventory inventory;
+	[SerializeField] private UIInventory uiInventory;
 
 	public static ChestInventory instance;
+	public GameObject chestUiPanel;
+
 
 	[Header("ChestInventory")]
-	public Transform ChestSlotPanel;
-	public ItemSlot[] Chestslots;
-	public Chest CurrentChest;
+	public Transform chestSlotPanel;
+	public ItemSlot[] chestslots;
+	public Chest currentChest;
 
 	[Header("UIInventory")]
-	public Transform InventorySlotPanel;
-	public ItemSlot[] UIslots;
+	public Transform inventorySlotPanel;
+	public ItemSlot[] inventorySlots;
 
 	[Header("SelectItem")]
-	public ItemSlot SelectItem;
+	public ItemSlot selectItem;
 	int SelectIndex;
 
 
@@ -66,31 +69,34 @@ public class ChestInventory : MonoBehaviour
 
 	void Init()
 	{
-		Chestslots = new ItemSlot[ChestSlotPanel.childCount];
-		UIslots = new ItemSlot[InventorySlotPanel.childCount];
+		chestslots = new ItemSlot[chestSlotPanel.childCount];
+		inventorySlots = new ItemSlot[inventorySlotPanel.childCount];
 
-		for (int i = 0; i < Chestslots.Length; i++)
+		for (int i = 0; i < chestslots.Length; i++)
 		{
-			Chestslots[i] = ChestSlotPanel.GetChild(i).GetComponent<ItemSlot>();
-			Chestslots[i].index = i;
-			Chestslots[i].chestInventory = this;
-			Chestslots[i].type = InventoryType.ChestInventory;
+			chestslots[i] = chestSlotPanel.GetChild(i).GetComponent<ItemSlot>();
+			chestslots[i].index = i;
+			chestslots[i].chestInventory = this;
+			chestslots[i].type = InventoryType.Chest;
+			chestslots[i].Clear();
 		}
-		for (int i = 0; i < UIslots.Length; i++)
+		for (int i = 0; i < inventorySlots.Length; i++)
 		{
-			UIslots[i] = InventorySlotPanel.GetChild(i).GetComponent<ItemSlot>();
-			UIslots[i].index = i;
-			UIslots[i].chestInventory = this;
-			Chestslots[i].type = InventoryType.ChestInventory;
+			inventorySlots[i] = inventorySlotPanel.GetChild(i).GetComponent<ItemSlot>();
+			inventorySlots[i].index = i;
+			inventorySlots[i].chestInventory = this;
+			inventorySlots[i].type = InventoryType.Player;
+			inventorySlots[i].Clear();
 		}
 
 		UpdateChestSlotUI();
 		UpdateInventorySlotUI();
+		chestUiPanel.SetActive(false);
 	}
 
 	public void OnChestInteract(Chest _chest)
 	{
-		CurrentChest = _chest;
+		currentChest = _chest;
 
 		if (Opend == false)
 		{
@@ -102,6 +108,7 @@ public class ChestInventory : MonoBehaviour
 			OnChestClose();
 
 		}
+		CharacterManager.Instance.player.controller.toggleCursor();
 	}
 
 
@@ -109,8 +116,7 @@ public class ChestInventory : MonoBehaviour
 	{
 		UpdateChestSlotUI();
 		UpdateInventorySlotUI();
-		ChestSlotPanel.gameObject.SetActive(true);
-		InventorySlotPanel.gameObject.SetActive(true);
+		chestUiPanel.SetActive(true);
 		Opend = true;
 	}
 
@@ -118,79 +124,136 @@ public class ChestInventory : MonoBehaviour
 	{
 		UpdateChestSlotUI();
 		UpdateInventorySlotUI();
-		ChestSlotPanel.gameObject.SetActive(false);
-		InventorySlotPanel.gameObject.SetActive(false);
+		chestUiPanel.SetActive(false);
 		Opend = false;
 	}
 
 	public void UpdateChestSlotUI()
 	{
+		if (currentChest == null)
+			return;
+
 		if (Opend == false)
 		{
-			for (int i = 0; i < Chestslots.Length; i++)
+			for (int i = 0; i < chestslots.Length; i++)
 			{
-				if (i < CurrentChest.slotCount)
+				if (i < currentChest.slotCount)
 				{
-					Chestslots[i].gameObject.SetActive(true);
-					Chestslots[i].item = CurrentChest.slot[i].item;
-					Chestslots[i].index = CurrentChest.slot[i].index;
-					Chestslots[i].Set();
+					chestslots[i].gameObject.SetActive(true);
+					chestslots[i].item = currentChest.slot[i].item;
+					chestslots[i].index = currentChest.slot[i].index;
+					chestslots[i].UpdateSlot();
 				}
 				else
 				{
-					Chestslots[i].gameObject.SetActive(false);
+					chestslots[i].gameObject.SetActive(false);
 				}
 			}
 		}
 		else
 		{
-			for (int i = 0; i < CurrentChest.slotCount; i++)
+			for (int i = 0; i < currentChest.slotCount; i++)
 			{
-				CurrentChest.slot[i].Set(Chestslots[i].item, Chestslots[i].index, Chestslots[i].quantity);
+				currentChest.slot[i].Set(chestslots[i].index, chestslots[i].quantity, chestslots[i].item);
 			}
 		}
-		
+
 	}
 
-	public void UpdateInventorySlotUI()
+	public void UpdateInventorySlotUI() // 오픈될 때 인벤토리 정보를 상자UI에 옮겨오는 함수
 	{
-		if (Opend == false)
+		if (inventorySlots.Length < uiInventory.slots.Length)
 		{
-			for (int i = 0; i < UIslots.Length; i++)
+			// 기존 배열 백업 및 새 배열 생성
+			ItemSlot[] oldSlots = inventorySlots;
+			inventorySlots = new ItemSlot[uiInventory.slots.Length];
+
+			// 기존 슬롯 복사
+			for (int i = 0; i < oldSlots.Length; i++)
 			{
-				UIslots[i].item = inventory.slots[i].item;
-				UIslots[i].Set();
+				inventorySlots[i] = oldSlots[i];
+			}
+
+			// 부족한 만큼 새로 생성
+			for (int i = oldSlots.Length; i < uiInventory.slots.Length; i++)
+			{
+				inventorySlots[i] = Instantiate(slotPrefabs, inventorySlotPanel).GetComponent<ItemSlot>();
 			}
 		}
-		else
+
+		int min = Mathf.Min(inventorySlots.Length, uiInventory.slots.Length);
+		int max = Mathf.Max(inventorySlots.Length, uiInventory.slots.Length);
+
+		for (int i = 0; i < min; i++)
 		{
-			for (int i = 0; i < inventory.slots.Length; i++)
+			if (uiInventory.slots[i] == null)
 			{
-				inventory.slots[i].item = UIslots[i].item;
-				inventory.slots[i].Set();
+				inventorySlots[i].gameObject.SetActive(false);
+				continue;
 			}
+			if (uiInventory.slots[i].item == null)
+			{
+				inventorySlots[i].Set();
+				continue;
+			}
+			if (Opend == false)
+			{
+				inventorySlots[i].item = uiInventory.slots[i].item;
+				inventorySlots[i].Set();
+				inventorySlots[i].gameObject.SetActive(true);
+			}
+			else
+			{
+				uiInventory.slots[i].item = inventorySlots[i].item;
+				uiInventory.slots[i].Set();
+			}
+
+		}
+		for (int i = min; i < max; i++)
+		{
+			inventorySlots[i].gameObject.SetActive(false);
 		}
 	}
 
 	public void SelectChestItem(ItemSlot itemSlot)
 	{
-		if (SelectItem != null)
+		if (selectItem == null)
 		{
-			SelectItem = itemSlot;
+			selectItem = itemSlot;
 			SelectIndex = itemSlot.index;
+			return;
 		}
-		else
+		if (selectItem == itemSlot)
 		{
-			ItemSlot item = itemSlot;
-			ItemSlot select = SelectItem;
-			SelectItem = item;
-			itemSlot = select;
-
-			SelectItem.Set();
-			itemSlot.Set();
-
-			SelectItem = null;
+			selectItem = null;
 			SelectIndex = -1;
+			return;
 		}
+
+		ItemSlot a = GetSlot(selectItem.type, SelectIndex);
+		ItemSlot b = GetSlot(itemSlot.type, itemSlot.index);
+		SwapSlots(a, b);
+
+		selectItem = null;
+		SelectIndex = -1;
+	}
+
+	private ItemSlot GetSlot(InventoryType type, int index)
+	{
+		if (type == InventoryType.Chest)
+		{
+			return chestslots[index];
+		}
+		return inventorySlots[index];
+	}
+
+	private void SwapSlots(ItemSlot a, ItemSlot b)
+	{
+		SlotData temp = a.GetData();
+		a.SetData(b.GetData());
+		b.SetData(temp);
+
+		a.UpdateSlot();
+		b.UpdateSlot();
 	}
 }
