@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Chest : MonoBehaviour,IInteractable
@@ -44,5 +45,18 @@ public class Chest : MonoBehaviour,IInteractable
 			slot[i].index = i;
 			slot[i].quantity = 0;
 		}
+	}
+
+	public bool IsSlotEmpty()
+	{
+		for(int i = 0; i < slotCount; i++)
+		{
+			if(slot[i].item != null)
+			{
+				return false;
+			}
+		}
+		return true;
+
 	}
 }
