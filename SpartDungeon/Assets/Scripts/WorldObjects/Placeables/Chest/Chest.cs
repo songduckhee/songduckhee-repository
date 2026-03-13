@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Chest : MonoBehaviour,IInteractable
 {
-    public ChestData[] slot;
+    public ItemSlot[] slot;
 	public string displayName;
 	public string description;
 	public int slotCount;
@@ -36,13 +37,14 @@ public class Chest : MonoBehaviour,IInteractable
 
 	public void Init()
 	{
-		slot = new ChestData[slotCount];
+		slot = new ItemSlot[slotCount];
 
 		for ( int i = 0; i < slotCount; i++)
 		{
-			slot[i] = new ChestData();
+			slot[i] = new ItemSlot();
 			slot[i].index = i;
 			slot[i].quantity = 0;
+			slot[i].item = null;
 		}
 	}
 

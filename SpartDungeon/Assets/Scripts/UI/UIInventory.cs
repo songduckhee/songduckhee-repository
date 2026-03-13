@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UIInventory : MonoBehaviour
 {
+    public static UIInventory Instance { get; private set;}
     public ItemSlot[] slots;  //UI에는 이미 하나로 잘 구성된 슬롯들이랑
 
     public GameObject inventoryWindow;
@@ -24,10 +25,10 @@ public class UIInventory : MonoBehaviour
     private PlayerController controller;
     private PlayerCondition condition;
 
-    ItemData selectedItem;
-    int selectedItemIndex = 0;
+    public ItemData selectedItem;
+    public int selectedItemIndex = 0;
     
-    int curEquipIndex;
+    public int curEquipIndex;
 
 	// Start is called before the first frame update
 	void Start()
@@ -45,12 +46,13 @@ public class UIInventory : MonoBehaviour
         for(int i = 0; i < slots.Length; i++)
         {
             slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
-            slots[i].index = i;
-            slots[i].inventory = this; // 데이터 초기화
+            slots[i].index = i; // 데이터 초기화
             slots[i].type = InventoryType.Player;
         }
+        ChestInventory.instance.uiInventorySlots = slots;
 		UpdateUI();
-		ClearSelectedItemWindow();   
+		ClearSelectedItemWindow();
+        Instance = this;
 	}
 
     // Update is called once per frame
@@ -240,7 +242,7 @@ public class UIInventory : MonoBehaviour
 
     public void OnEquipButton()
     {
-        if (slots[curEquipIndex].equipped)
+        if (slots[curEquipIndex].equipped == true)
         {
             //UnEquip
             UnEquip(curEquipIndex);
@@ -253,7 +255,12 @@ public class UIInventory : MonoBehaviour
         SelectItem(selectedItemIndex);
     }
 
-    void UnEquip(int index)
+    public void UnEquipButton()
+    {
+        UnEquip(selectedItemIndex);
+    }
+
+    public void UnEquip(int index)
     {
         slots[index].equipped = false;
         CharacterManager.Instance.Player.equip.UnEquip();

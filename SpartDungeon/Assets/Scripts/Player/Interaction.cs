@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +13,7 @@ public class Interaction : MonoBehaviour
 
     public GameObject curInteractGameObject;
     private IInteractable curInteractable;
+    private Chest curChest;
 
     public TextMeshProUGUI promptText;
     private Camera camera;

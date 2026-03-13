@@ -17,6 +17,7 @@ public class ItemSlot : MonoBehaviour
 
     
     public ItemData item;
+    public SlotData slotData;
 
     public Button button;
     public Image icon;
@@ -34,12 +35,15 @@ public class ItemSlot : MonoBehaviour
     private void Awake()
     {
         outline = GetComponent<Outline>();
+       
     }
 
     private void OnEnable()
     {
         outline.enabled = equipped;
-    }
+		inventory = UIInventory.Instance;
+		chestInventory = ChestInventory.instance;
+	}
 
 
     public void UpdateSlot()
@@ -75,21 +79,13 @@ public class ItemSlot : MonoBehaviour
     {
         if (type == InventoryType.Player)
         {
-            inventory.SelectItem(index);
+            UIInventory.Instance.SelectItem(index);
+
         }
         else if (type == InventoryType.Chest)
         {
-            chestInventory.SelectChestItem(this);
+            ChestInventory.instance.SelectChestItem(this);
         }
-    }
-    public void ChangeInfo(ItemSlot _item)
-    {
-        if (_item.item != null)
-        {
-            item = _item.item;
-        }
-        quantity = _item.quantity;
-        UpdateSlot();
     }
 
     public SlotData GetData()
@@ -106,6 +102,26 @@ public class ItemSlot : MonoBehaviour
 		item = data.item;
 		quantity = data.quantity;
 		equipped = data.equipped;
+        if(icon != null)
+        {
+			if (data.item != null)
+			{
+				icon.sprite = data.item.icon;
+				icon.gameObject.SetActive(true);
+			}
+			else
+			{
+				icon.sprite = null;
+				icon.gameObject.SetActive(false);
+			}
+		}
 	}
+
+    public void ShiftItemUseQuantity(int _quantity)
+    {
+
+
+
+    }
 
 }

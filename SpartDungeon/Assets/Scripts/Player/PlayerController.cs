@@ -21,11 +21,13 @@ public class PlayerController : MonoBehaviour
 	public float LookSensitivity;
 	private Vector2 mouseDelta;
 	public bool canLook = true;
+	public bool canMove = true;
 
 	public Action inventory;
 	private Rigidbody _rigidbody;
 	public Animator ghostAnimator;
 	public Animator playerAnimator;
+	public PlayerInput playerInput;
 
 	[Header("Collider")]
 	public Collider playerCollider;
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour
 		playerAnimator = GetComponent<Animator>();
 		ghostAnimator = transform.Find("Ghost").GetComponent<Animator>();
 		playerCollider = GetComponent<Collider>();
+		playerInput = GetComponent<PlayerInput>();
 	}
 
 	private void Start()
@@ -149,11 +152,36 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	public void toggleCursor()
+	 void toggleCursor()
 	{
 		bool toggle = Cursor.lockState == CursorLockMode.Locked;
 		Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
 		canLook = !toggle;
+	}
+
+	public void ChangeInputAction(CurrentInputAction curInput)
+	{
+		switch (curInput)
+		{
+			case CurrentInputAction.None:
+				break;
+			case CurrentInputAction.Player:
+				playerInput.SwitchCurrentActionMap("Player");
+				toggleCursor();
+				break;
+			case CurrentInputAction.Chest:
+				playerInput.SwitchCurrentActionMap("Chest");
+				if (UIInventory.Instance.IsOpen())
+				{
+					UIInventory.Instance.Toggle();
+					break;
+				}
+				toggleCursor();
+				break;
+			default:
+				break;
+		}
+
 	}
 
 

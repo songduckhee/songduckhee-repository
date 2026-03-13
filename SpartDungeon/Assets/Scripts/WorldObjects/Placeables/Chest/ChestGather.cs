@@ -34,7 +34,7 @@ public class ChestGather : MonoBehaviour,OnGather
 			Instantiate(particle, this.transform.position,this.transform.localRotation,this.transform);
 			if (capacity == 0)
 			{
-				Vector3 dir = this.transform.position - CharacterManager.Instance.player.transform.position;
+				Vector3 dir = this.transform.position - CharacterManager.Instance.Player.transform.position;
 				Instantiate(itemToGive.dropPrefabs,new Vector3(this.transform.position.x,this.transform.position.y+5f, this.transform.position.z), Quaternion.LookRotation(dir));
 				Destroy(this);
 			}

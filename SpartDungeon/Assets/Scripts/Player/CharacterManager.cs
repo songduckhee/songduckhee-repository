@@ -14,7 +14,7 @@ public class CharacterManager : MonoBehaviour
 			return instance;
 		}
 	}
-	public Player player;
+	private Player player;
 	public Player Player
 	{
 		get { return player; }

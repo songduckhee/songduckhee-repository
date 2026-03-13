@@ -173,6 +173,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Chest",
+            "id": "58b1865b-69e7-4267-a0e9-061b2089d525",
+            "actions": [
+                {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "881cf7c7-94bc-4378-87b6-dabf5c4450cb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5dd17d2a-4cb9-440b-ba6d-483de93f81f8",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

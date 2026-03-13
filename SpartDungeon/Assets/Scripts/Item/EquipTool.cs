@@ -37,7 +37,7 @@ public class EquipTool : Equip
 				Invoke("OnCanAttack", attackRate);
                 if (doesDealDamage)
                 {
-					CharacterManager.Instance.player.controller.playerAnimator.SetTrigger("Attack");
+					CharacterManager.Instance.Player.controller.playerAnimator.SetTrigger("Attack");
 				}
 			}
            
@@ -54,7 +54,7 @@ public class EquipTool : Equip
 
         if(Physics.Raycast(ray,out hit, attackDistance))
         {
-            if(doesGatherResources && hit.collider.TryGetComponent(out Resource resource))
+            if(doesGatherResources && hit.collider.TryGetComponent(out OnGather resource))
             {
                 resource.Gather(hit.point,hit.normal);
             }
