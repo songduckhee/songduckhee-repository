@@ -106,13 +106,12 @@ public class ItemSlot : MonoBehaviour
         {
 			if (data.item != null)
 			{
-				icon.sprite = data.item.icon;
-				icon.gameObject.SetActive(true);
+				Set();
+				outline.enabled = false;
 			}
 			else
 			{
-				icon.sprite = null;
-				icon.gameObject.SetActive(false);
+                Clear();
 			}
 		}
 	}

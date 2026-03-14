@@ -95,8 +95,7 @@ public class ChestInventory : MonoBehaviour
 			chestInvenSlots[i] = inventorySlotPanel.GetChild(i).GetComponent<ItemSlot>();
 			chestInvenSlots[i].index = i;
 			chestInvenSlots[i].chestInventory = this;
-			chestInvenSlots[i].type = InventoryType.Player;
-			chestInvenSlots[i].inventory = uiInventory;
+			chestInvenSlots[i].type = InventoryType.Chest;
 			chestInvenSlots[i].UpdateSlot();
 		}
 
@@ -239,10 +238,11 @@ public class ChestInventory : MonoBehaviour
 			return;
 		}
 
-		ItemSlot a = GetSlot(selectItem.type, SelectIndex);
-		ItemSlot b = GetSlot(itemSlot.type, itemSlot.index);
-		SwapSlots(a, b);
+		SlotData selectSlot = selectItem.GetData();
+		SlotData curSlot = itemSlot.GetData();
 
+		selectItem.SetData(curSlot);
+		itemSlot.SetData(selectSlot);
 		selectItem = null;
 		SelectIndex = -1;
 	}
